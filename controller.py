@@ -36,10 +36,8 @@ class MPDMQTTController:
         self.mpd_client = None
         try:
             self.mqtt_client = self.mqtt_connect()
-            self.mpd_client = self.mpd_connect()
         except ValueError:
-            self.close_connections()
-            self._LOG('Disconnecting all')
+            self._LOG.error('Issues with the MQTT connection')
 
         self._commands = {
             'getstate': self._funcpublish_statuspart('state'),
@@ -60,12 +58,8 @@ class MPDMQTTController:
     def loop_forever(self):
         self.mqtt_client.loop_forever()
 
-    def close_connections(self):
-        if self.mpd_client is not None:
-            self.mpd_client.close()
-            self.mpd_client.disconnect()
-        if self.mqtt_client is not None:
-            self.mqtt_client.disconnect()
+    def mqtt_disconnect(self):
+        self.mqtt_client.disconnect()
 
     def mqtt_connect(self):
         """Try and connect to the MQTT borker or raise a ValueError
@@ -99,12 +93,11 @@ class MPDMQTTController:
         self.mqtt_client.subscribe(os.path.join(self.mqtt_topicbase, 'control/#'))
 
     def _on_message(self, client, userdata, msg):
-        print(msg.topic+" "+str(msg.payload))
         command_handler = self._commands.get(msg.topic.split('/')[-1])
-        print(command_handler)
         if command_handler is not None:
-            print('lol')
+            self.mpd_client = self.mpd_connect()
             command_handler(msg.payload)
+            self.mpd_disconnect()
 
     def mpd_connect(self):
         """Try and connect to the MPD borker or raise a ValueError"""
@@ -118,6 +111,11 @@ class MPDMQTTController:
 
         return mpd_client
 
+    def mpd_disconnect(self):
+        self.mpd_client.close()
+        self.mpd_client.disconnect()
+        self.mpd_client = None
+
     def _funcpublish_statuspart(self, part):
         def func(*a, **kw):
             part_value = self.mpd_client.status().get(part)
@@ -127,7 +125,6 @@ class MPDMQTTController:
 
     def _toggle_play(self, *a, **kw):
         state = self.mpd_client.status()['state']
-        print('in play')
         if state == 'play':
             self.mpd_client.pause()
         else:
