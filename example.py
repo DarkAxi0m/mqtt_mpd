@@ -23,7 +23,7 @@ controller = MPDMQTTController(
     mqtt_client_id='mpd_controller',
     mqtt_topicbase='music',
     mqtt_port=1883,
-    mpd_server='sulfur',
+    mpd_server='mpd.lan',
     mpd_port=6600
 )
 
