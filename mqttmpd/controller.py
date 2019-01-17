@@ -19,12 +19,12 @@ import paho.mqtt.client as mqtt
 from mpd import MPDClient
 
 
-class MPDMQTTController:
+class MQTTMPDController(object):
 
     def __init__(self,
                  mqtt_broker, mqtt_client_id, mqtt_topicbase='music', mqtt_port=1883,
                  mpd_server='localhost', mpd_port=6600):
-        self._LOG = MPDMQTTController._get_logger()
+        self._LOG = MQTTMPDController._get_logger()
         self.mqtt_broker = mqtt_broker
         self.mqtt_client_id = mqtt_client_id
         self.mqtt_topicbase = mqtt_topicbase
