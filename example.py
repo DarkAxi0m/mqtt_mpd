@@ -15,10 +15,10 @@
 
 """
 
-from controller import MPDMQTTController
+from mqttmpd import MQTTMPDController
 
 # instanciating a controller
-controller = MPDMQTTController(
+controller = MQTTMPDController(
     mqtt_broker='mpd.lan',
     mqtt_client_id='mpd_controller',
     mqtt_topicbase='music',
