@@ -1,0 +1,8 @@
+services:
+  mqtt-mpd:
+    container_name: mqtt-mpd
+    build:
+      context: .
+    environment: 
+      MQTT_BROKER: '10.1.1.31'
+      MPD_SERVER: '10.1.1.31'
