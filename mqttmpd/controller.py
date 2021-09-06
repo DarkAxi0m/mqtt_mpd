@@ -90,11 +90,15 @@ class MQTTMPDController(object):
         self.mqtt_client.publish(
             os.path.join(self.mqtt_topicbase, 'status'),
             'online', retain=True)
-        self.mqtt_client.subscribe(os.path.join(self.mqtt_topicbase, 'control/#'))
+        mqttTopoc = os.path.join(self.mqtt_topicbase, 'control/#')
+        print ('MQTT Control topic: {}'.format(mqttTopoc))
+        self.mqtt_client.subscribe(mqttTopoc)
 
     def _on_message(self, client, userdata, msg):
+        topic = msg.topic.split('/')[-1]
         command_handler = self._commands.get(msg.topic.split('/')[-1])
         if command_handler is not None:
+            print ('MQTT Command: {}'.format(topic))
             self.mpd_client = self.mpd_connect()
             command_handler(msg.payload)
             self.mpd_disconnect()

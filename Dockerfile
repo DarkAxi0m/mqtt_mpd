@@ -14,9 +14,7 @@ COPY requirements.txt /app/requirements.txt
 RUN pip install -r requirements.txt
 
 
-ADD mqttmpd /app/mqttmpd
+COPY . /app
 ADD dockermain.py  /app/mqtt_mpd
 
-
-
-CMD [ "python","/app/mqtt_mpd" ]
+CMD [ "python3","-u","/app/mqtt_mpd" ]

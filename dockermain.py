@@ -16,13 +16,14 @@
 """
 
 import os
+import string
 
-MQTT_BROKER = os.getenv('MQTT_BROKER') or 'mpd.lan'
-MQTT_CLIENTID = os.getenv('MQTT_CLIENTID') or 'mpd_controller'
-MQTT_TOPIC = os.getenv('MQTT_TOPIC') or 'music'
+MQTT_BROKER =  (os.getenv('MQTT_BROKER') or 'mpd.lan').strip()
+MQTT_CLIENTID = (os.getenv('MQTT_CLIENTID') or 'mpd_controller').strip()
+MQTT_TOPIC = (os.getenv('MQTT_TOPIC') or 'music').strip()
 MQTT_PORT = int(os.getenv('MQTT_PORT') or 1883)
 
-MPD_SERVER = os.getenv('MPD_SERVER') or 'mpd.lan'
+MPD_SERVER = (os.getenv('MPD_SERVER') or 'mpd.lan').strip()
 MPD_PORT = int(os.getenv('MPD_PORT') or 6600)
 
 
