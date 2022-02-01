@@ -1,4 +1,4 @@
-FROM python:3
+FROM python:3.11-rc-slim
 
 ENV MQTT_BROKER='mpd.lan'
 ENV MQTT_CLIENTID='mpd_controller'
